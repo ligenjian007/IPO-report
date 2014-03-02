@@ -9,7 +9,7 @@ connection = pymongo.Connection('localhost', 27017)
 db = connection.risk_database
 collection = db.risk_collection
 
-pdfMatcher = re.compile(r'.*\.pdf')
+pdfMatcher = re.compile(r'.*\.txt')
 
 for filename in os.listdir('.'):
     if pdfMatcher.match(filename):
