@@ -49,27 +49,26 @@ class IPOReportExtractor:
 
     def riskContent(self):
 
-        riskNav = re.compile(u'^\s*第四[章节].*风险因素', re.MULTILINE)
+        riskNav = re.compile(u'^\s*第[三四][章节]\s*风险因素', re.MULTILINE )
         riskMatch = riskNav.finditer(self.documentContent())
         i= 0
         for match in riskMatch:
             i += 1
             if i == 2:
-                riskMatch = match
+                riskMatched = match
                 #print self.documentContent()[riskMatch.start(): riskMatch.end()]
 
-        founderNav = re.compile(u'^\s*第五[章节].*发行人基本情况', re.MULTILINE)
+        founderNav = re.compile(u'^\s*第[四五][章节].*基本情况', re.MULTILINE )
         founderMatch = founderNav.finditer(self.documentContent())
 
         i = 0
         for match in founderMatch:
             i += 1
             if i == 2:
-                founderMatch = match
+                founderMatched = match
                 #print self.documentContent()[founderMatch.start(): founderMatch.end()]
 
-        riskContent = self.documentContent()[riskMatch.start(): founderMatch.end()]
-        return self.documentContent()[riskMatch.end(): founderMatch.start()]
+        return self.documentContent()[riskMatched.end(): founderMatched.start()]
 
     def chapterSplit(self,content):
         chapterNav = re.compile(u'^\s*[一二三四五六七八九十]+、.*', re.MULTILINE)
@@ -96,15 +95,16 @@ class IPOReportExtractor:
         return riskMap
 
     def jsonDump(self):
-        fileName = self.prevName + '.json'
-        fp = open(fileName, 'w+b')
+        #fileName = self.prevName + '.json'
+        #fp = open(fileName, 'w+b')
         jsonContent = json.dumps(self.riskMapper(),ensure_ascii=False).decode('utf-8')
-        fp.write(jsonContent)
+        #fp.write(jsonContent)
         return jsonContent
 
     def processFile(self, fileName, path):
         self.openDocument(fileName, path)
-        self.chapterSplit(self.riskContent())
+        content = self.riskContent()
+        self.chapterSplit(content)
         self.jsonDump()
         return self.riskMap
 
