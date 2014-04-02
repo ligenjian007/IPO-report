@@ -95,6 +95,13 @@ class IPOReportExtractor:
             #print 'content:', riskMap[key]
         return riskMap
 
+    def riskMapperList(self):
+        riskList = []
+        for chapter in self.chapterList:
+            riskList.append({chapter.title : chapter.content})
+        self.riskList = riskList
+        return riskList
+
     def jsonDump(self):
         #fileName = self.prevName + '.json'
         #fp = open(fileName, 'w+b')
@@ -102,12 +109,17 @@ class IPOReportExtractor:
         #fp.write(jsonContent)
         return jsonContent
 
+    def jsonListDump(self):
+        jsonContent = json.dumps(self.riskMapperList(), ensure_ascii=False).decode('utf-8')
+        return jsonContent
+
     def processFile(self, fileName, path):
         self.openDocument(fileName, path)
         content = self.riskContent()
         self.chapterSplit(content)
         self.jsonDump()
-        return self.riskMap
+        self.jsonListDump()
+        return self.riskList
 
     def extractRisk(self, fileName, path):
         self.processFile(fileName, path)

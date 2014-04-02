@@ -9,16 +9,16 @@ connection = pymongo.Connection('localhost', 27017)
 db = connection.risk_database
 collection = db.risk_collection
 
-pdfMatcher = re.compile(r'.*\.pdf')
+pdfMatcher = re.compile(r'.*\.txt')
 
 numParsed = 0
 numError = 0
 
-for filename in os.listdir('./loss'):
+for filename in os.listdir('/home/ligenjian/Downloads/loss'):
     if pdfMatcher.match(filename):
         try:
             ipoExtractor = IPOReportExtractor.IPOReportExtractor()
-            riskMap = ipoExtractor.processFile(filename, './loss')
+            riskMap = ipoExtractor.processFile(filename, '/home/ligenjian/Downloads/loss')
             if filename.split('_')[0] == '1':
                 passed = True
             else:
