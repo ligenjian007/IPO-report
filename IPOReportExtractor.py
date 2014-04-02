@@ -68,7 +68,8 @@ class IPOReportExtractor:
                 founderMatched = match
                 #print self.documentContent()[founderMatch.start(): founderMatch.end()]
 
-        return self.documentContent()[riskMatched.end(): founderMatched.start()]
+        self.riskCont =  self.documentContent()[riskMatched.end(): founderMatched.start()]
+        return self.riskCont
 
     def chapterSplit(self,content):
         chapterNav = re.compile(u'^\s*[一二三四五六七八九十]+、.*', re.MULTILINE)
@@ -107,6 +108,10 @@ class IPOReportExtractor:
         self.chapterSplit(content)
         self.jsonDump()
         return self.riskMap
+
+    def extractRisk(self, fileName, path):
+        self.processFile(fileName, path)
+        return self.riskCont
 
 class TestIPOReportExtractor(unittest.TestCase):
 
